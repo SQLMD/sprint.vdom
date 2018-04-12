@@ -71,8 +71,6 @@ function changed(node1, node2) {
   );
 }
 
-function diff(node1, node2) {}
-
 /**
  * Compare the given nodes, and store the difference. Then, update the target.
  *
@@ -82,6 +80,21 @@ function diff(node1, node2) {}
  */
 // eslint-disable-next-line no-unused-vars
 function updateElement(targetHTMLElement, newVDOMNode, oldVDOMNode) {
-  const spanVDOMNode = newVDOMNode.children[2];
-  targetHTMLElement.appendChild(createElement(spanVDOMNode));
+  //Remove all children from targetHTMLElment and
+  while (targetHTMLElement.children.length > 0) {
+    targetHTMLElement.firstChild.remove();
+  }
+  //add all newVDOMNodes.children to targetHTMLElement
+  for (let child of newVDOMNode.children) {
+    if (typeof child !== "string") {
+      targetHTMLElement.appendChild(createElement(child));
+    } else {
+      targetHTMLElement.appendChild(document.createTextNode(child));
+    }
+  }
+
+  // Iterate over all props in newVDOMNode.props and update targetHTMLElement's attributes of the same name
+  for (let prop in newVDOMNode.props) {
+    targetHTMLElement.setAttribute(prop, newVDOMNode.props[prop]);
+  }
 }
