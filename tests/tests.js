@@ -32,11 +32,17 @@ describe("vDOM implementation", () => {
         .that.has.all.keys("type", "props", "children");
     });
 
-    it("should return a string for type", () => {});
+    it("should return a string for type", () => {
+      expect(spanElement.type).to.be.a("string");
+    });
 
-    it("should return an array of children objects", () => {});
+    it("should return an array of children objects", () => {
+      expect(spanElement.children).to.be.an("array");
+    });
 
-    it("should return a object of props", () => {});
+    it("should return a object of props", () => {
+      expect(spanElement.props).to.be.an("object");
+    });
 
     it("should return an array of grandchildren objects", () => {});
 
