@@ -2,25 +2,25 @@
 const { expect } = chai;
 
 describe("cc4-sprint.vdom", () => {
-  let aProps, divElement, spanElement, textElement, seedElements;
+  let aProps, divVDOMObject, spanVDOMObject, textString, seedVDOMObject;
 
   beforeEach(() => {
     // here are some test elements (aka seed) to help you get started
     aProps = { href: "https://codechrysalis.io" };
-    divElement = createVDOM(
+    divVDOMObject = createVDOM(
       "div",
       null,
       "text node",
       createVDOM("img", null, "text node")
     );
-    spanElement = createVDOM("span");
-    textElement = "Click Me";
-    seedElements = createVDOM(
+    spanVDOMObject = createVDOM("span");
+    textString = "Click Me";
+    seedVDOMObject = createVDOM(
       "a",
       aProps,
-      divElement,
-      spanElement,
-      textElement
+      divVDOMObject,
+      spanVDOMObject,
+      textString
     );
   });
 
@@ -33,48 +33,50 @@ describe("cc4-sprint.vdom", () => {
       });
 
       it("should return an object with type, props, and children properties", () => {
-        expect(spanElement)
+        expect(spanVDOMObject)
           .to.be.an("object")
           .that.has.all.keys("type", "props", "children");
       });
 
       it("should return a string for type", () => {
-        expect(spanElement.type).to.be.a("string");
+        expect(spanVDOMObject.type).to.be.a("string");
       });
 
       it("should return an array of children objects", () => {
-        expect(spanElement.children).to.be.an("array");
+        expect(spanVDOMObject.children).to.be.an("array");
       });
 
       it("should return a object of props", () => {
-        expect(spanElement.props).to.be.an("object");
+        expect(spanVDOMObject.props).to.be.an("object");
       });
 
       it("should return an array of grandchildren objects", () => {
-        const grandChildren = seedElements.children[0].children;
+        const grandChildren = seedVDOMObject.children[0].children;
 
         expect(grandChildren).to.be.an("array");
       });
 
       it("should return an array of great-grandchildren objects", () => {
         const greatGrandChildren =
-          seedElements.children[0].children[1].children;
+          seedVDOMObject.children[0].children[1].children;
 
         expect(greatGrandChildren).to.be.an("array");
       });
 
       it("should have a string value to represent a text node when given a string (aka text element)", () => {
-        const textNode = divElement.children[0];
+        const textNode = divVDOMObject.children[0];
         expect(textNode).to.be.a("string");
       });
     });
 
     describe("createElement function", () => {
-      let result;
+      let seedHTMLElement, spanHTMLElement, divHTMLElement;
 
       beforeEach(() => {
         // create your own seed elements or use the ones created above!
-        result = createElement(/* your seed elements */);
+        seedHTMLElement = createElement(seedVDOMObject);
+        spanHTMLElement = createElement(spanVDOMObject);
+        divHTMLElement = createElement(divVDOMObject);
       });
 
       it("should have a function called createElement", () => {
@@ -82,7 +84,7 @@ describe("cc4-sprint.vdom", () => {
       });
 
       it("should return an HTML Element", () => {
-        expect(result.tagName).to.equal("A");
+        expect(seedHTMLElement.tagName).to.equal("A");
       });
 
       it("should convert childNodes to HTML", () => {
@@ -92,13 +94,19 @@ describe("cc4-sprint.vdom", () => {
         |* This may be important for testing...
         |* ...ok, it obviously is, so take this clue into account.
         */
+        expect(divHTMLElement.children[0] instanceof HTMLElement).to.be.true;
       });
 
       it("should convert grand childNodes to HTML", () => {
-        // see the clue above for this
+        expect(seedHTMLElement.children[0].children[0] instanceof HTMLElement)
+          .to.be.true;
       });
 
-      it("should convert props to attributes", () => {});
+      it("should convert props to attributes", () => {
+        for (let prop in seedVDOMObject.props) {
+          expect(prop in seedHTMLElement.attributes).to.be.true;
+        }
+      });
     });
 
     describe("updateElement function", () => {
