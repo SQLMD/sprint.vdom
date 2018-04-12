@@ -6,7 +6,14 @@
  * @returns {Object}
  */
 // eslint-disable-next-line no-unused-vars
-function createVDOM(type, props, ...children) {}
+function createVDOM(type, props, ...children) {
+  const result = {
+    type,
+    props,
+    children: [],
+  };
+  return result;
+}
 
 /**
  * Create and returns an HTML Element given a VDOM object

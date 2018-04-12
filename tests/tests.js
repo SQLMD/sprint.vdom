@@ -26,7 +26,11 @@ describe("vDOM implementation", () => {
       expect(createVDOM).to.be.a("function");
     });
 
-    it("should return an object with type, props, and children properties", () => {});
+    it("should return an object with type, props, and children properties", () => {
+      expect(spanElement)
+        .to.be.an("object")
+        .that.has.all.keys("type", "props", "children");
+    });
 
     it("should return a string for type", () => {});
 
