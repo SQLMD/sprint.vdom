@@ -22,7 +22,9 @@ describe("vDOM implementation", () => {
   // we have some spec titles to help you get started
 
   describe("createVDOM function", () => {
-    it("should have a function called 'createVDOM'", () => {});
+    it("should have a function called 'createVDOM'", () => {
+      expect(createVDOM).to.be.a("function");
+    });
 
     it("should return an object with type, props, and children properties", () => {});
 
