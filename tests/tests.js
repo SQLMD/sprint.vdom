@@ -61,7 +61,10 @@ describe("vDOM implementation", () => {
       expect(greatGrandChildren).to.be.an("array");
     });
 
-    it("should have a string value to represent a text node when given a string (aka text element)", () => {});
+    it("should have a string value to represent a text node when given a string (aka text element)", () => {
+      const textNode = divElement.children[0];
+      expect(textNode).to.be.a("string");
+    });
   });
 
   describe("createElement function", () => {
