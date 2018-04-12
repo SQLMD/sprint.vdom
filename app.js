@@ -65,11 +65,39 @@ function createElement(node) {
  */
 function changed(node1, node2) {
   return (
-    typeof node1 !== typeof node2 ||
-    (typeof node1 === "string" && node1 !== node2) ||
-    node1.type !== node2.type
+    // typeof node1 !== typeof node2 ||
+    // (typeof node1 === "string" && node1 !== node2) ||
+    // node1.type !== node2.type ||
+    // node1.props !== node2.props ||
+    node1.children.length !== node2.children.length
   );
 }
+
+/**
+ * Returns an array of the changes, [adds] //, deletes, and updates]
+ * @param {Object} oldNode VDOM Object
+ * @param {Object} newNode VDOM Object
+ * @returns {Array}
+ */
+// function getChanges(oldNode,newNode){
+//   result = [];
+//   if(changed(oldNode,newNode)){
+//     for(let child of newNode.children){
+//       if(!oldNode.children.includes(child)){
+//         result.push({add: child});
+//       }
+//     }
+//     for(let child of oldNode.children){
+//       if(!newNode.children.includes(child)){
+//         result.push({remove: child});
+//       } else {
+//         //
+//       }
+//     }
+
+//   }
+//   return result;
+// }
 
 /**
  * Compare the given nodes, and store the difference. Then, update the target.
@@ -80,21 +108,40 @@ function changed(node1, node2) {
  */
 // eslint-disable-next-line no-unused-vars
 function updateElement(targetHTMLElement, newVDOMNode, oldVDOMNode) {
-  //Remove all children from targetHTMLElment and
-  while (targetHTMLElement.children.length > 0) {
-    targetHTMLElement.firstChild.remove();
+  if (!oldVDOMNode) {
+    targetHTMLElement.appendChild(createElement(newVDOMNode));
+  } else if (!newVDOMNode) {
+    targetHTMLElement.removeChild(createElement(oldVDOMNode));
   }
-  //add all newVDOMNodes.children to targetHTMLElement
-  for (let child of newVDOMNode.children) {
-    if (typeof child !== "string") {
-      targetHTMLElement.appendChild(createElement(child));
-    } else {
-      targetHTMLElement.appendChild(document.createTextNode(child));
-    }
+  for (let i = 0; i < newVDOMNode.children.length; i++) {
+    console.log(
+      i,
+      targetHTMLElement,
+      newVDOMNode.children[i],
+      oldVDOMNode.children[i]
+    );
+    updateElement(
+      targetHTMLElement,
+      newVDOMNode.children[i],
+      oldVDOMNode.children[i]
+    );
   }
 
-  // Iterate over all props in newVDOMNode.props and update targetHTMLElement's attributes of the same name
-  for (let prop in newVDOMNode.props) {
-    targetHTMLElement.setAttribute(prop, newVDOMNode.props[prop]);
-  }
+  // //Remove all children from targetHTMLElment and
+  // while (targetHTMLElement.children.length > 0) {
+  //   targetHTMLElement.firstChild.remove();
+  // }
+  // //add all newVDOMNodes.children to targetHTMLElement
+  // for (let child of newVDOMNode.children) {
+  //   if (typeof child !== "string") {
+  //     targetHTMLElement.appendChild(createElement(child));
+  //   } else {
+  //     targetHTMLElement.appendChild(document.createTextNode(child));
+  //   }
+  // }
+
+  // // Iterate over all props in newVDOMNode.props and update targetHTMLElement's attributes of the same name
+  // for (let prop in newVDOMNode.props) {
+  //   targetHTMLElement.setAttribute(prop, newVDOMNode.props[prop]);
+  // }
 }

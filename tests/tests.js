@@ -155,7 +155,7 @@ describe("cc4-sprint.vdom", () => {
         expect(target.childNodes[2].nodeName).to.equal("SPAN");
       });
 
-      it("should update target element with new nodes", () => {
+      it.only("should update target element with new nodes", () => {
         let newNodeAddToBeginning = createVDOM(
           "div",
           {
@@ -175,7 +175,7 @@ describe("cc4-sprint.vdom", () => {
         expect(target.childNodes[2].nodeName).to.equal("P");
       });
 
-      it("should delete old nodes", () => {
+      it.only("should delete old nodes", () => {
         let nodeRemoveFromMiddle = createVDOM(
           "div",
           { id: "tes-div", style: "display: none;" },
@@ -299,6 +299,49 @@ describe("cc4-sprint.vdom", () => {
         expect(target.childNodes[0].attributes.length).to.equal(0);
         expect(target.childNodes[1].attributes.length).to.equal(1);
         expect(target.childNodes[1].getAttribute("class")).to.equal("baz");
+      });
+    });
+  });
+  describe("change functions", () => {
+    it("changed should be a function", () => {
+      expect(changed).to.be.a("function");
+    });
+
+    it("should return true for two different obejcts", () => {
+      obj1 = { type: "div", props: null, children: [] };
+      obj2 = {
+        type: "div",
+        props: null,
+        children: [{ type: "img", props: null, children: [] }],
+      };
+
+      expect(changed(obj1, obj2)).to.be.true;
+    });
+    it("getChanges should be a function", () => {
+      expect(getChanges).to.be.a("function");
+    });
+
+    it("getChanges should return an array", () => {
+      obj1 = { type: "div", props: null, children: [] };
+      obj2 = {
+        type: "div",
+        props: null,
+        children: [{ type: "img", props: null, children: [] }],
+      };
+
+      expect(getChanges(obj1, obj2)).to.be.an("Array");
+    });
+
+    it("getChanges should return an array with an add change", () => {
+      obj1 = { type: "div", props: null, children: [] };
+      obj2 = {
+        type: "div",
+        props: null,
+        children: [{ type: "img", props: null, children: [] }],
+      };
+
+      expect(getChanges(obj1, obj2)[0]).to.deep.equal({
+        add: obj2.children[0],
       });
     });
   });
