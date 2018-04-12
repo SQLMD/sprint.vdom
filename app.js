@@ -71,6 +71,8 @@ function changed(node1, node2) {
   );
 }
 
+function diff(node1, node2) {}
+
 /**
  * Compare the given nodes, and store the difference. Then, update the target.
  *
@@ -79,4 +81,7 @@ function changed(node1, node2) {
  * @param {Object} oldVDOMNode a VDOMNode that represents the target HTMLElement (previous state of newNode)
  */
 // eslint-disable-next-line no-unused-vars
-function updateElement(target, newNode, oldNode) {}
+function updateElement(targetHTMLElement, newVDOMNode, oldVDOMNode) {
+  const spanVDOMNode = newVDOMNode.children[2];
+  targetHTMLElement.appendChild(createElement(spanVDOMNode));
+}
