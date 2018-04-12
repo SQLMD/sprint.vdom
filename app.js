@@ -54,6 +54,15 @@ function createElement(node) {
 }
 
 // eslint-disable-next-line no-unused-vars
+/**
+ * Returns whether or not the given nodes are :
+ *   not the same type OR
+ *   not equal strings OR
+ *   not the same VDOM.type
+ * @param {Object} node1
+ * @param {Object} node2
+ * @returns Boolean
+ */
 function changed(node1, node2) {
   return (
     typeof node1 !== typeof node2 ||
@@ -65,10 +74,9 @@ function changed(node1, node2) {
 /**
  * Compare the given nodes, and store the difference. Then, update the target.
  *
- *
- * @param {Com} target the HTMLElement that should be updated
- * @param {*} newNode
- * @param {*} oldNode
+ * @param {HTMLElement} targetHTMLElement the HTMLElement that should be updated (in place)
+ * @param {Object} newVDOMNode a VDOMNode that represents the Virtual DOM in the changed state
+ * @param {Object} oldVDOMNode a VDOMNode that represents the target HTMLElement (previous state of newNode)
  */
 // eslint-disable-next-line no-unused-vars
 function updateElement(target, newNode, oldNode) {}
