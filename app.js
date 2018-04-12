@@ -7,11 +7,18 @@
  */
 // eslint-disable-next-line no-unused-vars
 function createVDOM(type, props = {}, ...children) {
+  //Initialize result
   const result = {
     type,
     props,
     children: [],
   };
+  //traverse the children
+  //add each child to this result's children
+  for (let child of children) {
+    result.children.push(child);
+  }
+
   return result;
 }
 

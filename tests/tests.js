@@ -7,7 +7,12 @@ describe("vDOM implementation", () => {
   beforeEach(() => {
     // here are some test elements (aka seed) to help you get started
     aProps = { href: "https://codechrysalis.io" };
-    divElement = createVDOM("div", null, "text node", createVDOM("img"));
+    divElement = createVDOM(
+      "div",
+      null,
+      "text node",
+      createVDOM("img", null, "text node")
+    );
     spanElement = createVDOM("span");
     textElement = "Click Me";
     seedElements = createVDOM(
@@ -44,10 +49,16 @@ describe("vDOM implementation", () => {
       expect(spanElement.props).to.be.an("object");
     });
 
-    it("should return an array of grandchildren objects", () => {});
+    it("should return an array of grandchildren objects", () => {
+      const grandChildren = seedElements.children[0].children;
+
+      expect(grandChildren).to.be.an("array");
+    });
 
     it("should return an array of great-grandchildren objects", () => {
-      // maybe you need to edit the seed elements above a little for this one
+      const greatGrandChildren = seedElements.children[0].children[1].children;
+
+      expect(greatGrandChildren).to.be.an("array");
     });
 
     it("should have a string value to represent a text node when given a string (aka text element)", () => {});
