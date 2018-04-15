@@ -65,83 +65,62 @@ function createElement(node) {
  */
 function changed(node1, node2) {
   return (
-    // typeof node1 !== typeof node2 ||
-    // (typeof node1 === "string" && node1 !== node2) ||
-    // node1.type !== node2.type ||
-    // node1.props !== node2.props ||
-    node1.children.length !== node2.children.length
+    typeof node1 !== typeof node2 ||
+    (typeof node1 === "string" && node1 !== node2) ||
+    node1.type !== node2.type
   );
 }
 
 /**
- * Returns an array of the changes, [adds] //, deletes, and updates]
- * @param {Object} oldNode VDOM Object
- * @param {Object} newNode VDOM Object
- * @returns {Array}
- */
-// function getChanges(oldNode,newNode){
-//   result = [];
-//   if(changed(oldNode,newNode)){
-//     for(let child of newNode.children){
-//       if(!oldNode.children.includes(child)){
-//         result.push({add: child});
-//       }
-//     }
-//     for(let child of oldNode.children){
-//       if(!newNode.children.includes(child)){
-//         result.push({remove: child});
-//       } else {
-//         //
-//       }
-//     }
-
-//   }
-//   return result;
-// }
-
-/**
  * Compare the given nodes, and store the difference. Then, update the target.
  *
- * @param {HTMLElement} targetHTMLElement the HTMLElement that should be updated (in place)
- * @param {Object} newVDOMNode a VDOMNode that represents the Virtual DOM in the changed state
- * @param {Object} oldVDOMNode a VDOMNode that represents the target HTMLElement (previous state of newNode)
+ * @param {HTMLElement} target the HTMLElement that should be updated (in place)
+ * @param {Object} newNode a VDOMNode that represents the Virtual DOM in the changed state
+ * @param {Object} oldNode a VDOMNode that represents the target HTMLElement (previous state of newNode)
  */
 // eslint-disable-next-line no-unused-vars
-function updateElement(targetHTMLElement, newVDOMNode, oldVDOMNode) {
-  if (!oldVDOMNode) {
-    targetHTMLElement.appendChild(createElement(newVDOMNode));
-  } else if (!newVDOMNode) {
-    targetHTMLElement.removeChild(createElement(oldVDOMNode));
+function updateElement(target, newNode, oldNode) {
+  if (typeof newNode === "string") {
+    target.innerText = newNode;
+    return;
   }
-  for (let i = 0; i < newVDOMNode.children.length; i++) {
-    console.log(
-      i,
-      targetHTMLElement,
-      newVDOMNode.children[i],
-      oldVDOMNode.children[i]
-    );
+
+  if (!newNode) {
+    target.parentNode.removeChild(target);
+    return;
+  }
+  let x = changed(newNode, oldNode);
+  if (changed(newNode, oldNode)) {
+    target.parentNode.replaceChild(createElement(newNode), target);
+    return;
+  }
+
+  if (newNode.props !== oldNode.props) {
+    if (oldNode.props) {
+      Object.keys(oldNode.props).forEach((name) =>
+        target.removeAttribute(name)
+      );
+    }
+    if (newNode.props) {
+      Object.keys(newNode.props).forEach((name) =>
+        target.setAttribute(name, newNode.props[name])
+      );
+    }
+  }
+
+  if (typeof oldNode === "string") {
+    return;
+  }
+
+  oldNode.children.forEach((oldNodeChild, i) => {
     updateElement(
-      targetHTMLElement,
-      newVDOMNode.children[i],
-      oldVDOMNode.children[i]
+      target.childNodes[i],
+      newNode.children[i],
+      oldNode.children[i]
     );
+  });
+
+  for (let i = oldNode.children.length; i < newNode.children.length; i += 1) {
+    target.appendChild(createElement(newNode.children[i]));
   }
-
-  // //Remove all children from targetHTMLElment and
-  // while (targetHTMLElement.children.length > 0) {
-  //   targetHTMLElement.firstChild.remove();
-  // }
-  // //add all newVDOMNodes.children to targetHTMLElement
-  // for (let child of newVDOMNode.children) {
-  //   if (typeof child !== "string") {
-  //     targetHTMLElement.appendChild(createElement(child));
-  //   } else {
-  //     targetHTMLElement.appendChild(document.createTextNode(child));
-  //   }
-  // }
-
-  // // Iterate over all props in newVDOMNode.props and update targetHTMLElement's attributes of the same name
-  // for (let prop in newVDOMNode.props) {
-  //   targetHTMLElement.setAttribute(prop, newVDOMNode.props[prop]);
-  // }
 }
